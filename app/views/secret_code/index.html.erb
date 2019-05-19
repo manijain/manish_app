@@ -1,0 +1,32 @@
+<div class="col-sm-6">
+  <div class="jumbotron">
+<% if @secret_code.present? %>
+<p>Find list of Secret Code associated with users</p><hr/>
+<table><tr><th>s.no.</th><th>Secret Code</th><th>User Email Asso</th>
+<% @secret_code.each_with_index do |sc, index| %>
+  <td><%= index+1 %></td><td><%= sc.secret_string %></td><td><%= sc.try(:user).try(:email) %></td>
+<% end %>
+</tr></table>
+<% else %>
+<p>Not available</p>
+<% end %>
+
+<hr/>
+    <h3>Create secret code here ... </h3><hr/>
+      <%= form_tag('/secret_codes') do |f| %>
+
+      <div class="form-group">
+        <%= label_tag :code_strig, :class => 'control-label col-lg-2' %>
+        <div class="col-lg-10">
+          <%= select_tag :code_strig, options_for_select(["10", "20", "30", "40"], "10"), :class => 'form-control' %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+          <%= submit_tag "Create", :class => 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
