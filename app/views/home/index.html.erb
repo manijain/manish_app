@@ -1,7 +1,47 @@
-<div class="jumbotron">
-  <h1 class="display-4">Hello, world!</h1>
-  <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-  <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-  <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="jumbotron">
+      <h1 class="display-4">Hello world !!</h1>
+      <p class="lead">This is a sample authentication system based on secret code for providing more security for users.</p>
+      <hr class="my-4">
+      <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="jumbotron">
+      <% if user_signed_in? && current_user.admin? %>
+        <h4>Generate secret code</h4>
+        <%= form_tag(secret_code_create_path, :method => 'post') do |f| %>
+          <div class="form-group">
+            <%= label_tag :code_count, "Please select total number to generate secret code" %>
+            <div class="col-lg-6">
+              <%= select_tag :code_count, options_for_select(["10", "20", "30", "40"], "10"), :class => 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+              <%= submit_tag "Create", :class => 'btn btn-primary' %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>  
+    </div>
+  </div>
 </div>
+
+<div class="row">
+  <div class="col-md-6">
+    <h5>List of available secret code</h5>
+    <% if @available_secret_codes.present? %>
+      <table class="table"><tr><th>#</th><th>Secret Code</th>
+        <% @available_secret_codes.each_with_index do |sc, index| %>
+          <tr><td><%= index+1 %>. </td><td><%= sc.try(:code_string) %></td></tr>
+        <% end %>
+      </table>
+    <% else %>
+    <p>Not available</p>
+    <% end %>
+  </div>
+</div>
+<br/>

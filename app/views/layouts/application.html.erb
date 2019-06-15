@@ -11,9 +11,14 @@
 
   <body>
     <%= render partial: 'layouts/header' %>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
     <div class="col-sm-12">
+      <div class="notification">
+        <% if flash[:notice] %>
+          <p class="alert alert-success" role="alert"><%= notice %></p>
+        <% elsif flash[:alert] %>
+          <p class="alert alert-danger" role="alert"><%= alert %></p>
+        <% end %>
+      </div>
       <%= yield %>
     </div>
     <%= render partial: 'layouts/footer' %>

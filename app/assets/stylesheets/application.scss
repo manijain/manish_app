@@ -12,5 +12,14 @@
  *
  */
 
- @import "bootstrap"
+ @import "bootstrap";
  
+.notification {
+  margin-top: 15px;
+}
+
+.user-name { 
+  color:white;
+  margin-right: 12px;
+  padding-top: 10px;
+}

@@ -1,12 +1,15 @@
 class SecretCodeController < ApplicationController
+  load_and_authorize_resource
+  before_action :authenticate_user!
   before_action :authenticate_admin
 
-  def index
-    @secret_code = SecretCode.all
-  end
 
   def new
     @secret_code = SecretCode.new
+  end
+
+  def index
+    @unavailable_secret_codes = SecretCode.unavailable_code
   end
 
   def generate_rand_num
@@ -15,22 +18,23 @@ class SecretCodeController < ApplicationController
   end
 
   def create
-    if params.present? && params[:code_strig].present?
-      input_code_count = params[:code_strig].to_i
+    if params.present? && params[:code_count].present?
+      input_code_count = params[:code_count].to_i
       input_code_count.times do |a|
-        SecretCode.create(code_strig: generate_rand_num)
+        SecretCode.create(code_string: generate_rand_num)
       end
       flash[:notice] = "secret code created successfully."
-      redirect_to secret_code_index_path
-    else
-      render: :new 
+      redirect_to root_path
     end
   end
 
   private
 
   def authenticate_admin
-    current_user.role.try(:name).eql?("admin")
+    unless current_user.admin?
+      flash[:notice] = "Invalid User."
+      redirect_to root_path
+    end 
   end
 
   def secret_code_params

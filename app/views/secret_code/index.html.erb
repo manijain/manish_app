@@ -1,32 +1,37 @@
+<div class="row">
 <div class="col-sm-6">
   <div class="jumbotron">
-<% if @secret_code.present? %>
-<p>Find list of Secret Code associated with users</p><hr/>
-<table><tr><th>s.no.</th><th>Secret Code</th><th>User Email Asso</th>
-<% @secret_code.each_with_index do |sc, index| %>
-  <td><%= index+1 %></td><td><%= sc.secret_string %></td><td><%= sc.try(:user).try(:email) %></td>
-<% end %>
-</tr></table>
-<% else %>
-<p>Not available</p>
-<% end %>
-
-<hr/>
-    <h3>Create secret code here ... </h3><hr/>
-      <%= form_tag('/secret_codes') do |f| %>
-
-      <div class="form-group">
-        <%= label_tag :code_strig, :class => 'control-label col-lg-2' %>
-        <div class="col-lg-10">
-          <%= select_tag :code_strig, options_for_select(["10", "20", "30", "40"], "10"), :class => 'form-control' %>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-lg-offset-2 col-lg-10">
-          <%= submit_tag "Create", :class => 'btn btn-primary' %>
-        </div>
-      </div>
+    <h5>List of associated secret code with user </h5><br/>
+    <% if @unavailable_secret_codes.present? %>
+      <table class="table"><tr><th>#</th><th>User Email</th><th>Secret Code</th>
+        <% @unavailable_secret_codes.each_with_index do |sc, index| %>
+          <tr><td><%= index+1 %>. </td><td><%= sc.user.try(:email) %></td><td><%= sc.try(:code_string) %></td></tr>
+        <% end %>
+      </table>
+    <% else %>
+      <p>Not available</p>
     <% end %>
+  </div>
+</div>
+  <div class="col-sm-6">
+    <div class="jumbotron">
+      <% if user_signed_in? && current_user.admin? %>
+        <h4>Generate secret code</h4>
+        <%= form_tag(secret_code_create_path, :method => 'post') do |f| %>
+          <div class="form-group">
+            <%= label_tag :code_count, "Please select total number to generate secret code" %>
+            <div class="col-lg-6">
+              <%= select_tag :code_count, options_for_select(["10", "20", "30", "40"], "10"), :class => 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+              <%= submit_tag "Create", :class => 'btn btn-primary' %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>  
+    </div>
   </div>
 </div>
