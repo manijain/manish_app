@@ -9,6 +9,7 @@ class SecretCodeController < ApplicationController
   end
 
   def index
+    @secret_code = SecretCode.new
     @unavailable_secret_codes = SecretCode.unavailable_code
   end
 
